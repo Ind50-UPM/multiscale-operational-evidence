@@ -1,0 +1,18 @@
+{
+  "analogicas_nonans.parquet": {
+    "rows": 7712604,
+    "duplicate_timestamps": 0,
+    "sha256": "281d6acf659d74af93905d79bd2cb60370825e0c02ca1b90c23e2aade5154271"
+  },
+  "digitales.parquet": {
+    "rows": 12358892,
+    "duplicate_timestamps": 0,
+    "sha256": "aa4fccba8cdb2818cd2e5a89cc5876c4fc87d17c07cfc77304a69cdf783149b1"
+  },
+  "unmatched_command_samples": 8,
+  "retained_Model_A_predictions": {
+    "sha256": "851ae35a77b05273aa68e3b1b732ca590a0d79dd1ab2a5fc5012f9f8a397e674",
+    "exact_timestamp_fraction": 0.1642963906872439,
+    "provenance": "retained pred_estado; original Model A chronological training split not recovered; not independent health labels"
+  }
+}

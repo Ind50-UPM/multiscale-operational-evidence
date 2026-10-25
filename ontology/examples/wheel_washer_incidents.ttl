@@ -1,0 +1,28 @@
+@prefix iabm: <https://w3id.org/iabm#> .
+@prefix ex:   <https://w3id.org/iabm/example/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+ex:PumpAbruptFailureFamily a iabm:IncidentFamily ;
+    rdfs:label "Pump abrupt failure" .
+
+ex:RecoveryStableRegime a iabm:RecoveryRegime ;
+    rdfs:label "Stable recovered regime" .
+
+ex:DegradationAccelerationRegime a iabm:LifeRegime ;
+    rdfs:label "Degradation acceleration regime" .
+
+ex:Signature_19_31_12 a iabm:SequenceSignature ;
+    rdfs:label "Sequence signature 19/31/12" .
+
+ex:OccurrenceInterval_1 a iabm:OccurrenceInterval ;
+    iabm:hasRecurrenceInterval "86400"^^xsd:decimal .
+
+ex:IncidentEpisode_2022_02_21 a iabm:IncidentEpisode ;
+    rdfs:label "Wheel washer incident episode on 2022-02-21" ;
+    iabm:belongsToIncidentFamily ex:PumpAbruptFailureFamily ;
+    iabm:precedesRecovery ex:RecoveryStableRegime ;
+    iabm:hasRecoveryTime "7200"^^xsd:decimal .
+
+ex:Sequence_19_31_12_PostFault iabm:signalsLifeRegime ex:DegradationAccelerationRegime ;
+    iabm:hasWeakLabel ex:PumpAbruptFailureFamily .

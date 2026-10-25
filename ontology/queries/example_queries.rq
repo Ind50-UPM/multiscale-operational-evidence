@@ -1,0 +1,59 @@
+############################################################
+# Example query 1
+# Retrieve observations and inferred states
+############################################################
+
+PREFIX iabm: <https://w3id.org/iabm#>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?observation ?state ?stateLabel
+WHERE {
+  ?observation a sosa:Observation ;
+               iabm:evidencesState ?state .
+  OPTIONAL { ?state rdfs:label ?stateLabel . }
+}
+
+############################################################
+# Example query 2
+# Retrieve sequences and the modes that summarize them
+############################################################
+
+PREFIX iabm: <https://w3id.org/iabm#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?sequence ?mode ?modeLabel
+WHERE {
+  ?sequence a iabm:BehavioralSequence ;
+            iabm:summarizedByMode ?mode .
+  OPTIONAL { ?mode rdfs:label ?modeLabel . }
+}
+
+############################################################
+# Example query 3
+# Retrieve states, structural anchors, and functional roles
+############################################################
+
+PREFIX iabm: <https://w3id.org/iabm#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?state ?anchor ?role
+WHERE {
+  ?state a iabm:OperationalState .
+  OPTIONAL { ?state iabm:hasStructuralAnchor ?anchor . }
+  OPTIONAL { ?state iabm:hasFunctionalRole ?role . }
+}
+
+############################################################
+# Example query 4
+# Retrieve anomalous sequences and their nominal references
+############################################################
+
+PREFIX iabm: <https://w3id.org/iabm#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?observedSequence ?nominalSequence
+WHERE {
+  ?observedSequence a iabm:BehavioralSequence ;
+                    iabm:deviatesFromNominal ?nominalSequence .
+}

@@ -1,0 +1,32 @@
+{
+  "window": {
+    "length_hours": 24,
+    "step_hours": 1,
+    "min_coverage": 0.9,
+    "min_active_sequences": 1
+  },
+  "episode_detection": {
+    "onset_threshold": 1.0,
+    "recovery_threshold": 0.5,
+    "onset_windows": 2,
+    "recovery_windows": 3,
+    "maximum_gap_hours": 2,
+    "minimum_duration_hours": 0.1667
+  },
+  "weights": {
+    "sequence": 1.0,
+    "duration": 1.0,
+    "recurrence": 1.0,
+    "persistence": 1.0,
+    "consumption": 1.0,
+    "state_error": 1.0,
+    "mode": 1.0
+  },
+  "family_assignment": {
+    "method": "rule_based",
+    "minimum_confidence": 0.6
+  },
+  "occurrence": {
+    "minimum_events_for_fit": 5
+  }
+}

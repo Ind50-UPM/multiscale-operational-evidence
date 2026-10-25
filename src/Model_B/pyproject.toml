@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "industrial-behavior-model-b"
+version = "1.0.0"
+description = "Duration-aware behavioural sequences and nominal comparison (Model B)"
+authors = ["Antonio Bello-García", "Javier Villalba-Díez", "Ana González-Marcos", "Joaquín Ordieres-Meré"]
+license = "AGPL-3.0-only"
+readme = "README.md"
+packages = [{include = "iabm_behavior"}]
+include = [
+    { path = "locales/**/*.po", format = ["sdist", "wheel"] },
+    { path = "locales/messages.pot", format = ["sdist", "wheel"] }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = ">=1.26,<3"
+pandas = ">=2.1,<4"
+pyarrow = ">=14"
+openpyxl = "^3.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+industrial-behavior = "iabm_behavior.main:main"

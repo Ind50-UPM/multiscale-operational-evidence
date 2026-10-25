@@ -1,0 +1,104 @@
+@prefix iabm: <https://w3id.org/iabm#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix ssn:  <http://www.w3.org/ns/ssn/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+iabm:IndustrialAsset a owl:Class .
+iabm:Subsystem a owl:Class .
+iabm:Component a owl:Class .
+iabm:StructuralAnchor a owl:Class .
+iabm:FunctionalRole a owl:Class .
+iabm:OperationalState a owl:Class .
+iabm:BehavioralSequence a owl:Class .
+iabm:OperatingMode a owl:Class .
+iabm:WorkingMode a owl:Class .
+iabm:AbnormalityEvidence a owl:Class .
+iabm:StatePrediction a owl:Class .
+iabm:IncidentEpisode a owl:Class .
+iabm:IncidentFamily a owl:Class .
+iabm:RecoveryRegime a owl:Class .
+iabm:LifeRegime a owl:Class .
+iabm:OccurrenceInterval a owl:Class .
+iabm:SequenceSignature a owl:Class .
+
+iabm:hasSubsystem a owl:ObjectProperty ;
+    rdfs:domain iabm:IndustrialAsset ;
+    rdfs:range iabm:Subsystem .
+
+iabm:hasComponent a owl:ObjectProperty ;
+    rdfs:domain iabm:Subsystem ;
+    rdfs:range iabm:Component .
+
+iabm:hasStructuralAnchor a owl:ObjectProperty ;
+    rdfs:domain iabm:OperationalState ;
+    rdfs:range iabm:StructuralAnchor .
+
+iabm:hasFunctionalRole a owl:ObjectProperty ;
+    rdfs:domain iabm:OperatingMode ;
+    rdfs:range iabm:FunctionalRole .
+
+iabm:evidencesState a owl:ObjectProperty ;
+    rdfs:domain sosa:Observation ;
+    rdfs:range iabm:OperationalState .
+
+iabm:derivedFromObservation a owl:ObjectProperty ;
+    rdfs:domain iabm:StatePrediction ;
+    rdfs:range sosa:Observation .
+
+iabm:belongsToSequence a owl:ObjectProperty ;
+    rdfs:domain iabm:OperationalState ;
+    rdfs:range iabm:BehavioralSequence .
+
+iabm:summarizedByMode a owl:ObjectProperty ;
+    rdfs:domain iabm:BehavioralSequence ;
+    rdfs:range iabm:OperatingMode .
+
+iabm:hasWorkingMode a owl:ObjectProperty ;
+    rdfs:domain iabm:BehavioralSequence ;
+    rdfs:range iabm:WorkingMode .
+
+iabm:deviatesFromNominal a owl:ObjectProperty ;
+    rdfs:domain iabm:BehavioralSequence ;
+    rdfs:range iabm:BehavioralSequence .
+
+iabm:belongsToIncidentFamily a owl:ObjectProperty ;
+    rdfs:domain iabm:IncidentEpisode ;
+    rdfs:range iabm:IncidentFamily .
+
+iabm:precedesRecovery a owl:ObjectProperty ;
+    rdfs:domain iabm:IncidentEpisode ;
+    rdfs:range iabm:RecoveryRegime .
+
+iabm:signalsLifeRegime a owl:ObjectProperty ;
+    rdfs:domain iabm:BehavioralSequence ;
+    rdfs:range iabm:LifeRegime .
+
+iabm:hasWeakLabel a owl:ObjectProperty ;
+    rdfs:domain iabm:BehavioralSequence ;
+    rdfs:range iabm:IncidentFamily .
+
+iabm:hasAnomalyScore a owl:DatatypeProperty ;
+    rdfs:domain iabm:AbnormalityEvidence .
+
+iabm:hasRecoveryTime a owl:DatatypeProperty ;
+    rdfs:domain iabm:IncidentEpisode .
+
+iabm:hasRecurrenceInterval a owl:DatatypeProperty ;
+    rdfs:domain iabm:OccurrenceInterval .
+
+# Example domain alignment
+iabm:Pump a owl:Class ;
+    rdfs:subClassOf iabm:Component .
+
+iabm:ElectricalChannel a owl:Class ;
+    rdfs:subClassOf iabm:StructuralAnchor .
+
+iabm:IdleState a iabm:OperationalState .
+iabm:SteadyOperation a iabm:OperatingMode .
+iabm:StartupTransition a iabm:OperatingMode .
+iabm:IdleLowLoad a iabm:OperatingMode .

@@ -1,0 +1,214 @@
+{
+  "level_columns": {
+    "M0": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence"
+    ],
+    "M1": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence",
+      "command_response_deviation"
+    ],
+    "M2": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence",
+      "command_response_deviation",
+      "transient_concentration"
+    ],
+    "M3": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence",
+      "command_response_deviation",
+      "transient_concentration_vqe"
+    ]
+  },
+  "config": {
+    "onset_quantile": 0.95,
+    "recovery_quantile": 0.8,
+    "share_exact_vqe_threshold": true,
+    "minimum_phase_windows": 24,
+    "risk_horizons_hours": [
+      6,
+      24,
+      72,
+      168
+    ],
+    "risk_target_families": [
+      "pump_abrupt_failure",
+      "process_saturation"
+    ]
+  },
+  "model_d_config": {
+    "window": {
+      "length": "P1DT0H0M0S",
+      "step": "P0DT1H0M0S",
+      "min_coverage": 0.9,
+      "min_active_sequences": 1
+    },
+    "detection": {
+      "onset_threshold": 1.0,
+      "recovery_threshold": 0.5,
+      "onset_windows": 2,
+      "recovery_windows": 3,
+      "minimum_duration": "P0DT0H10M0S",
+      "maximum_gap": "P0DT2H0M0S",
+      "maximum_duration": "P7DT0H0M0S"
+    },
+    "weights": {
+      "sequence": 1.0,
+      "duration": 1.0,
+      "recurrence": 1.0,
+      "persistence": 1.0,
+      "consumption": 1.0,
+      "state_error": 1.0,
+      "mode": 1.0,
+      "command_response": 1.0,
+      "transient_concentration": 1.0
+    },
+    "family_assignment": {
+      "method": "rule_based",
+      "minimum_confidence": 0.6
+    },
+    "occurrence": {
+      "minimum_events_for_fit": 5
+    }
+  },
+  "centers": {
+    "sequence_divergence": 0.019298765020843624,
+    "duration_drift": 0.2294944463268512,
+    "recurrence_excess": 3.392802608712632,
+    "persistence_excess": 0.9000167960585591,
+    "consumption_deviation": 0.019204080173761254,
+    "state_error_rate": 0.06410443762482342,
+    "mode_divergence": 0.013332543685017644,
+    "command_response_deviation": 1.8286513010102117,
+    "transient_concentration": 1.5931402110458615,
+    "transient_concentration_vqe": 1.5931402110458615
+  },
+  "scales": {
+    "sequence_divergence": 0.039399905173896875,
+    "duration_drift": 0.4584637100885918,
+    "recurrence_excess": 6.07802085025252,
+    "persistence_excess": 3.03951367781155,
+    "consumption_deviation": 0.08589606740277994,
+    "state_error_rate": 0.008635732957747754,
+    "mode_divergence": 0.01611367625044364,
+    "command_response_deviation": 0.19583124900458687,
+    "transient_concentration": 0.33032741395649423,
+    "transient_concentration_vqe": 0.33032741395649423
+  },
+  "common_support_windows": 1124,
+  "reference_status": "weak derived signal references",
+  "phase_windows": {
+    "reference": 313,
+    "calibration": 282,
+    "test": 529
+  },
+  "study_end": "2022-09-11 00:00:00",
+  "threshold_policy": "M3 shares M2",
+  "validation_availability": {
+    "maintenance overlap": "unavailable: no temporally aligned intervention intervals",
+    "false warning burden": "unavailable: no independently healthy intervals; total warning burden is reported",
+    "physical onset/recovery accuracy": "unavailable: independent timestamped onset/recovery truth absent",
+    "physical risk performance": "unavailable: only fixed weak-reference risk performance can be evaluated"
+  },
+  "runtime_versions": {
+    "python": "3.12.3",
+    "numpy": "1.26.4",
+    "pandas": "2.1.4",
+    "pyarrow": "17.0.0"
+  },
+  "input_provenance": {
+    "boundaries_utc": {
+      "start": "2022-07-01",
+      "observer_end": "2022-07-22",
+      "reference_end": "2022-08-05",
+      "calibration_end": "2022-08-19",
+      "end": "2022-09-11"
+    },
+    "input_audit": {
+      "analogicas_nonans.parquet": {
+        "rows": 7712604,
+        "duplicate_timestamps": 0,
+        "sha256": "281d6acf659d74af93905d79bd2cb60370825e0c02ca1b90c23e2aade5154271"
+      },
+      "digitales.parquet": {
+        "rows": 12358892,
+        "duplicate_timestamps": 0,
+        "sha256": "aa4fccba8cdb2818cd2e5a89cc5876c4fc87d17c07cfc77304a69cdf783149b1"
+      },
+      "unmatched_command_samples": 8,
+      "retained_Model_A_predictions": {
+        "sha256": "851ae35a77b05273aa68e3b1b732ca590a0d79dd1ab2a5fc5012f9f8a397e674",
+        "exact_timestamp_fraction": 0.1642963906872439,
+        "provenance": "retained pred_estado; original Model A chronological training split not recovered; not independent health labels"
+      }
+    },
+    "electrical_config": {
+      "channels": [
+        "RP1",
+        "RP2",
+        "RP3"
+      ],
+      "state_column": "controller_state",
+      "timestamp_column": "timestamp",
+      "minimum_samples": 32,
+      "minimum_safe_fraction": 0.9,
+      "settling_samples": 3,
+      "maximum_gap_seconds": 1.614,
+      "sample_period_seconds": 0.807,
+      "shrinkage": 0.1,
+      "inverse_floor": 1e-06
+    },
+    "vqe_resource_budget": {
+      "layers": 3,
+      "sweeps": 6,
+      "restarts": 2,
+      "seed": 1729,
+      "batch_size": 256,
+      "simulator": "NumPy statevector RY/CX; no eigenvector warm start or fallback"
+    },
+    "behavioral_definition": "new frozen raw-command seven-coordinate encoder; not replay of retained semantic baseline; command-bit-count mode proxy",
+    "observer_definition": "state median/MAD and settling guard; not the atlas state-and-age observer",
+    "model_a_prediction_warning": "retained sparse predictions; original Model A fit/holdout provenance not reconstructed",
+    "encoding_seconds": 159.01876924559474,
+    "source_code_sha256": {
+      "src/run_model_d_ablation.py": "b346ce0a8ccbb6f2c98991baff7be0c1fbe14c7f29ba2c708cd727b723c0fbb9",
+      "src/Model_D/iabm_incidents/behavioral.py": "aca1f4c2215271bf69671eed0b4c30a52bc0e06c817969206af234b2d048061d",
+      "src/Model_D/iabm_incidents/electrical.py": "0b1f462b45446c93c43abf49f8bdcb6caf72fd2011823c11f2069c00d3eb779c",
+      "src/Model_D/iabm_incidents/ablation.py": "d745a567239bbaf29e9e0aeeabfc06f03370ad7f1e16f34242fd0654419c109b"
+    },
+    "behavioral_refresh": {
+      "reason": "mask rare unknown commands and exclude their transitions; sufficient nominal-state coverage for dwell",
+      "source_hashes": {
+        "src/run_model_d_ablation.py": "6dbb9a0f804198ec60dfaca2907d50e7d3209f49afe614b53b820ca088fdae09",
+        "src/Model_D/iabm_incidents/behavioral.py": "890f1f095cf5b12d87506187e7575d200b59f32f3505e0b43147801159b3fad5"
+      }
+    },
+    "evaluation_source_code_sha256": {
+      "src/run_model_d_ablation.py": "d5b025a247e6ad107ba34ed0af38e69fe3c43e1500fe22a7fffaa2c4f04b7502",
+      "src/Model_D/iabm_incidents/ablation.py": "ca9a6b5ebdd312ed159b2ef8e4d3b448faed3d8bc26ace2779fec8d8d4c5e4ee"
+    }
+  },
+  "maintenance_search": "Found 2024--2026 retained reported-maintenance comparison, referenced Word sources absent; no recoverable 2022 interval-level maintenance truth."
+}

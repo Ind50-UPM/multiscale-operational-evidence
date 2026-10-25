@@ -1,0 +1,9 @@
+sphinx>=7
+furo
+sphinxcontrib-mermaid
+numpy
+pandas
+pyarrow
+scikit-learn
+joblib
+openpyxl

@@ -1,0 +1,19 @@
+body {
+  font-size: 16px;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+h2 {
+  margin-top: 2rem;
+}
+
+.sidebar-brand-text {
+  font-weight: 700;
+}
+
+.toctree-wrapper.compound ul {
+  margin-top: 1rem;
+}

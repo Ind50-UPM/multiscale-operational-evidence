@@ -1,0 +1,71 @@
+{
+  "protocol": "one prespecified multiscale sensitivity; no best-scale selection",
+  "windows_minutes": [
+    15,
+    60,
+    360,
+    1440
+  ],
+  "decision_step_minutes": 15,
+  "fixed_risk_holdout_start": "2022-08-19 00:00:00",
+  "primary_experiment": "retained 24-hour/hourly experiment; no files modified",
+  "common_phase_endpoints": {
+    "reference": 329,
+    "calibration": 192,
+    "test": 271
+  },
+  "retrospective_reference_cohort_count": 115,
+  "retrospective_reference_cohort": "events observed in shortest supported test windows; fixed across scales",
+  "future_target_registry": "complete supplied registry, unchanged across scales/levels",
+  "outcome_provenance": "weak derived signal references",
+  "boundaries_utc": {
+    "start": "2022-07-01",
+    "observer_end": "2022-07-22",
+    "reference_end": "2022-08-05",
+    "calibration_end": "2022-08-19",
+    "end": "2022-09-11"
+  },
+  "primary_artifact_files_unchanged": true,
+  "primary_manifest_sha256": "eddcb472991ff8ec26ea92f8ebd7f71e3883e0ba19d81842661e9accce352f2e",
+  "frozen_observer_sha256": "d720f3ccc49ff33d76171cb38b73c49612d9ad5a56f336bc2dc85ff23b84116c",
+  "frozen_electrical_reference_sha256": "ceec33a7fd4d360481f1fb91a74365c69eb39e86e2a496d5430b47ae7586d227",
+  "vqe_resource_budget": {
+    "layers": 3,
+    "sweeps": 6,
+    "restarts": 2,
+    "seed": 1729,
+    "batch_size": 256,
+    "simulator": "NumPy statevector RY/CX; no eigenvector warm start or fallback"
+  },
+  "input_source_audit": {
+    "analogicas_nonans.parquet": {
+      "rows": 7712604,
+      "duplicate_timestamps": 0,
+      "sha256": "281d6acf659d74af93905d79bd2cb60370825e0c02ca1b90c23e2aade5154271"
+    },
+    "digitales.parquet": {
+      "rows": 12358892,
+      "duplicate_timestamps": 0,
+      "sha256": "aa4fccba8cdb2818cd2e5a89cc5876c4fc87d17c07cfc77304a69cdf783149b1"
+    },
+    "unmatched_command_samples": 8,
+    "retained_Model_A_predictions": {
+      "sha256": "851ae35a77b05273aa68e3b1b732ca590a0d79dd1ab2a5fc5012f9f8a397e674",
+      "exact_timestamp_fraction": 0.1642963906872439,
+      "provenance": "retained pred_estado; original Model A chronological training split not recovered; not independent health labels"
+    }
+  },
+  "runtime_versions": {
+    "python": "3.12.3",
+    "numpy": "1.26.4",
+    "pandas": "2.1.4"
+  },
+  "elapsed_seconds": 23.601373630575836,
+  "materialization_elapsed_seconds": 711.2167788818479,
+  "source_code_sha256": {
+    "/mnt/d2tb/home/jordieres/soft/I5.0/industrial-asset-reliability-monitoring/src/run_model_d_multiscale.py": "83c0ffe5dea82a20dace9908cb61978ac6ae0cb3e05f436bb5713137d3daaec2",
+    "src/Model_D/iabm_incidents/multiscale.py": "01274bd768b473308478aaf989d0de59fae4ec3394d65e03b8028a126d14136f",
+    "src/Model_D/iabm_incidents/ablation.py": "3e66a9a1cdc0e4e9631ada9bd70c75035ec266a3ee33bffc7cfc060417fafb14",
+    "src/Model_D/iabm_incidents/behavioral.py": "890f1f095cf5b12d87506187e7575d200b59f32f3505e0b43147801159b3fad5"
+  }
+}

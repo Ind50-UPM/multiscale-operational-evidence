@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart System ID 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-08 22:59+0100\n"
+"PO-Revision-Date: 2026-03-08 23:05+0100\n"
+"Last-Translator: Antonio Bello-García\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Industrial state identification framework for IIoT assets"
+msgstr "Industrial state identification framework for IIoT assets"
+
+msgid "Execution mode: train a new model or generate predictions."
+msgstr "Execution mode: train a new model or generate predictions."
+
+msgid "Algorithm to use for Model_A training or inference."
+msgstr "Algorithm to use for Model_A training or inference."
+
+msgid "Interface language."
+msgstr "Interface language."
+
+msgid "Path to the analog Parquet dataset."
+msgstr "Path to the analog Parquet dataset."
+
+msgid "Path to the digital Parquet dataset used for training labels."
+msgstr "Path to the digital Parquet dataset used for training labels."
+
+msgid "Output path for the trained model artifact."
+msgstr "Output path for the trained model artifact."
+
+msgid "Output directory for metrics or predictions."
+msgstr "Output directory for metrics or predictions."
+
+msgid "Start date (YYYY-MM-DD HH:MM:SS)."
+msgstr "Start date (YYYY-MM-DD HH:MM:SS)."
+
+msgid "End date (YYYY-MM-DD HH:MM:SS)."
+msgstr "End date (YYYY-MM-DD HH:MM:SS)."
+
+msgid "Power threshold used to mark inactive rows."
+msgstr "Power threshold used to mark inactive rows."
+
+msgid "Number of cross-validation folds."
+msgstr "Number of cross-validation folds."
+
+msgid "Include inactive rows with state 0 in the prediction output."
+msgstr "Include inactive rows with state 0 in the prediction output."
+
+msgid "Starting cross-validation from {} to {}"
+msgstr "Starting cross-validation from {} to {}"
+
+msgid "Fold {}: accuracy = {:.4f}"
+msgstr "Fold {}: accuracy = {:.4f}"
+
+msgid "Average accuracy: {:.4f} (+/- {:.4f})"
+msgstr "Average accuracy: {:.4f} (+/- {:.4f})"
+
+msgid "Training accuracy: {:.4f}"
+msgstr "Training accuracy: {:.4f}"
+
+msgid "Metrics saved to: {}"
+msgstr "Metrics saved to: {}"
+
+msgid "Model saved to: {}"
+msgstr "Model saved to: {}"
+
+msgid "Model path is required for prediction mode (--model-out)."
+msgstr "Model path is required for prediction mode (--model-out)."
+
+msgid "Prediction output directory is required (--pred-out)."
+msgstr "Prediction output directory is required (--pred-out)."
+
+msgid "Loading model from: {}"
+msgstr "Loading model from: {}"
+
+msgid "Loading data for prediction from {} to {}"
+msgstr "Loading data for prediction from {} to {}"
+
+msgid "Predictions saved to: {}"
+msgstr "Predictions saved to: {}"
+
+msgid "Unsupported algorithm: {}."
+msgstr "Unsupported algorithm: {}."

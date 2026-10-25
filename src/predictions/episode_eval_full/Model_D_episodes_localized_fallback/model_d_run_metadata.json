@@ -1,0 +1,53 @@
+{
+  "config": {
+    "window": {
+      "length": "P1DT0H0M0S",
+      "step": "P0DT1H0M0S",
+      "min_coverage": 0.9,
+      "min_active_sequences": 1
+    },
+    "detection": {
+      "onset_threshold": 1.0,
+      "recovery_threshold": 0.5,
+      "onset_windows": 2,
+      "recovery_windows": 3,
+      "minimum_duration": "P0DT0H10M0S",
+      "maximum_gap": "P0DT2H0M0S",
+      "maximum_duration": "P7DT0H0M0S"
+    },
+    "weights": {
+      "sequence": 1.0,
+      "duration": 1.0,
+      "recurrence": 1.0,
+      "persistence": 1.0,
+      "consumption": 1.0,
+      "state_error": 1.0,
+      "mode": 1.0
+    },
+    "family_assignment": {
+      "method": "rule_based",
+      "minimum_confidence": 0.6
+    },
+    "occurrence": {
+      "minimum_events_for_fit": 5
+    }
+  },
+  "inputs": {
+    "sequences": "src/predictions/episode_eval_full/Model_B/active_sequences.csv",
+    "assignments": "src/predictions/episode_eval_full/Model_C/semantic_assignments.csv",
+    "registry": null,
+    "analogue": null,
+    "digital": null,
+    "workbook": null,
+    "detection_mode": "semantic",
+    "used_prewindowed_inputs": false,
+    "sheets": {
+      "sequences": "sequences",
+      "assignments": "assignments",
+      "registry": "registry",
+      "real_window_indicators": "Window_indicators",
+      "real_exposure": "Observation_exposure"
+    },
+    "has_exposure_sheet": false
+  }
+}

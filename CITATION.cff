@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the accompanying manuscript and the software."
+title: "Multi-Scale Operational Evidence: certified variational fourth-order transients and conformal multi-scale fusion for low-intrusion industrial telemetry"
+version: 1.0.0
+license: AGPL-3.0-only
+repository-code: "https://github.com/Ind50-UPM/multiscale-operational-evidence"
+authors:
+  - family-names: Bello-García
+    given-names: Antonio
+    affiliation: Universidad de Oviedo
+  - family-names: Villalba-Díez
+    given-names: Javier
+    affiliation: Hochschule Heilbronn
+  - family-names: González-Marcos
+    given-names: Ana
+    affiliation: Universidad de La Rioja
+  - family-names: Ordieres-Meré
+    given-names: Joaquín
+    affiliation: Universidad Politécnica de Madrid
+    email: j.ordieres@upm.es
+preferred-citation:
+  type: article
+  title: "Calibrated Multi-Scale Incident Evidence from Low-Intrusion Electrical Telemetry with Certified Fourth-Order Transient Analysis"
+  journal: "Results in Engineering"
+  status: submitted
+  year: 2026
+  authors:
+    - family-names: Bello-García
+      given-names: Antonio
+    - family-names: Villalba-Díez
+      given-names: Javier
+    - family-names: González-Marcos
+      given-names: Ana
+    - family-names: Ordieres-Meré
+      given-names: Joaquín

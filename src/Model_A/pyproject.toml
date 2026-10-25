@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "smart-system-id-a"
+version = "1.0.0"
+description = "Operational-state inference (Model A) from low-intrusion industrial telemetry"
+authors = ["Antonio Bello-García", "Javier Villalba-Díez", "Ana González-Marcos", "Joaquín Ordieres-Meré"]
+license = "AGPL-3.0-only"
+readme = "README.md"
+packages = [{include = "iabm"}]
+include = [
+    { path = "locales/**/*.po", format = ["sdist", "wheel"] },
+    { path = "locales/messages.pot", format = ["sdist", "wheel"] }
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+numpy = ">=1.26,<3"
+pandas = ">=2.1,<4"
+scikit-learn = "^1.3.0"
+xgboost = "^2.0.0"
+pyarrow = ">=14"  # Parquet I/O
+joblib = "^1.3.0"    # Model persistence
+matplotlib = "^3.8.0"
+scipy = "^1.11.0"
+openpyxl = "^3.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=7.4"
+sphinx = "^7.2.0"    # API documentation from docstrings
+black = "^23.9.0"    # Code formatter
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+industrial-id = "iabm.main:main"

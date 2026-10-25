@@ -1,0 +1,31 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Model_C 0.1.0\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Semantic interpretation of industrial behavioral sequences"
+msgstr "Semantic interpretation of industrial behavioral sequences"
+
+msgid "Path to the Model_B active-sequence report."
+msgstr "Path to the Model_B active-sequence report."
+
+msgid "Optional Model_B comparison report used to enrich semantic status."
+msgstr "Optional Model_B comparison report used to enrich semantic status."
+
+msgid "Optional JSON file with semantic interpretation rules."
+msgstr "Optional JSON file with semantic interpretation rules."
+
+msgid "Directory where Model_C reports will be written."
+msgstr "Directory where Model_C reports will be written."
+
+msgid "Interface language."
+msgstr "Interface language."
+
+msgid "Semantic assignments saved to: {}"
+msgstr "Semantic assignments saved to: {}"
+
+msgid "Semantic mode summary saved to: {}"
+msgstr "Semantic mode summary saved to: {}"

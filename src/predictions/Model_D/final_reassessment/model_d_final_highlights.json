@@ -1,0 +1,13 @@
+{
+  "months_processed": 50,
+  "best_recall_month": "202203",
+  "best_recall_mode": "semantic",
+  "best_recall_value": 0.2177914110429447,
+  "slowest_month": "202205",
+  "slowest_mode": "indicators",
+  "slowest_runtime_seconds": 2.2516274450026685,
+  "semantic_mean_runtime_seconds": 0.23544876749947435,
+  "indicator_mean_runtime_seconds": 1.6941496304006431,
+  "semantic_total_episodes": 20,
+  "indicator_total_episodes": 12
+}

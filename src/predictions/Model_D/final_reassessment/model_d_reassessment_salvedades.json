@@ -1,0 +1,17 @@
+{
+  "missing_months_in_requested_horizon": [
+    "202211",
+    "202212",
+    "202408",
+    "202506"
+  ],
+  "low_data_months": [
+    {
+      "source_month": "202505",
+      "timeline_rows": 40,
+      "sequence_rows": 1,
+      "assignment_rows": 1
+    }
+  ],
+  "precision_interpretation_note": "episode_precision and family_precision are inflated by repeated episode-to-registry match accounting; prefer recall and temporal overlap for comparison."
+}

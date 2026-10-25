@@ -1,0 +1,26 @@
+{
+  "months_requested": [
+    "202403",
+    "202404",
+    "202406",
+    "202410"
+  ],
+  "months_completed": [
+    "202403",
+    "202404",
+    "202406",
+    "202410"
+  ],
+  "empty_like_months": [],
+  "failed_months": [],
+  "failure_count": 0,
+  "anomaly_threshold": 1.0,
+  "outputs": {
+    "manifest_csv": "/mnt/d2tb/home/jordieres/soft/I5.0/industrial-asset-reliability-monitoring/src/predictions/episode_eval_probe/model_bc_batch_manifest.csv",
+    "active_sequences_csv": "/mnt/d2tb/home/jordieres/soft/I5.0/industrial-asset-reliability-monitoring/src/predictions/episode_eval_probe/Model_B/active_sequences.csv",
+    "sequence_comparison_csv": "/mnt/d2tb/home/jordieres/soft/I5.0/industrial-asset-reliability-monitoring/src/predictions/episode_eval_probe/Model_B/sequence_comparison.csv",
+    "semantic_assignments_csv": "/mnt/d2tb/home/jordieres/soft/I5.0/industrial-asset-reliability-monitoring/src/predictions/episode_eval_probe/Model_C/semantic_assignments.csv",
+    "incident_family_assignments_csv": "/mnt/d2tb/home/jordieres/soft/I5.0/industrial-asset-reliability-monitoring/src/predictions/episode_eval_probe/Model_C/incident_family_assignments.csv",
+    "semantic_mode_summary_csv": "/mnt/d2tb/home/jordieres/soft/I5.0/industrial-asset-reliability-monitoring/src/predictions/episode_eval_probe/Model_C/semantic_mode_summary.csv"
+  }
+}

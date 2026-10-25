@@ -1,0 +1,150 @@
+@prefix iabm: <https://w3id.org/iabm#> .
+@prefix sosa: <http://www.w3.org/ns/sosa/> .
+@prefix ssn:  <http://www.w3.org/ns/ssn/> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix saref: <https://saref.etsi.org/core/> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix ex:   <https://w3id.org/iabm/example/> .
+
+#################################################################
+# Asset and structural organization
+#################################################################
+
+ex:WheelWashingFacility a iabm:IndustrialAsset ;
+    rdfs:label "Port of Gijón wheel-washing facility" ;
+    iabm:hasSubsystem ex:PumpingSubsystem ;
+    iabm:hasSubsystem ex:TankSubsystem .
+
+ex:PumpingSubsystem a iabm:Subsystem ;
+    rdfs:label "Main pumping subsystem" ;
+    iabm:hasComponent ex:DivingPump1 ;
+    iabm:hasComponent ex:DivingPump2 ;
+    iabm:hasComponent ex:FeedbackPump1 ;
+    iabm:hasComponent ex:FeedbackPump2 ;
+    iabm:hasComponent ex:FlocculentPump .
+
+ex:TankSubsystem a iabm:Subsystem ;
+    rdfs:label "Tank and water-level subsystem" ;
+    iabm:hasComponent ex:TankPump .
+
+ex:DivingPump1 a iabm:Pump ;
+    rdfs:label "Diving Pump 1" .
+
+ex:DivingPump2 a iabm:Pump ;
+    rdfs:label "Diving Pump 2" .
+
+ex:FeedbackPump1 a iabm:Pump ;
+    rdfs:label "Feedback Pump 1" .
+
+ex:FeedbackPump2 a iabm:Pump ;
+    rdfs:label "Feedback Pump 2" .
+
+ex:FlocculentPump a iabm:Pump ;
+    rdfs:label "Flocculent Pump" .
+
+ex:TankPump a iabm:Pump ;
+    rdfs:label "Tank Pump" .
+
+#################################################################
+# Structural anchors and functional roles
+#################################################################
+
+ex:Channel38A5 a iabm:ElectricalChannel ;
+    rdfs:label "Channel #38A5" .
+
+ex:Channel38A6 a iabm:ElectricalChannel ;
+    rdfs:label "Channel #38A6" .
+
+ex:Channel38A7 a iabm:ElectricalChannel ;
+    rdfs:label "Channel #38A7" .
+
+ex:Channel38B0 a iabm:ElectricalChannel ;
+    rdfs:label "Channel #38B0" .
+
+ex:Channel38B1 a iabm:ElectricalChannel ;
+    rdfs:label "Channel #38B1" .
+
+ex:Channel38B2 a iabm:ElectricalChannel ;
+    rdfs:label "Channel #38B2" .
+
+ex:PumpingRole a iabm:FunctionalRole ;
+    rdfs:label "Pumping" .
+
+ex:RecirculationRole a iabm:FunctionalRole ;
+    rdfs:label "Recirculation" .
+
+ex:DosingRole a iabm:FunctionalRole ;
+    rdfs:label "Dosing" .
+
+ex:StandbyRole a iabm:FunctionalRole ;
+    rdfs:label "Standby / low-load support" .
+
+#################################################################
+# Sensors and observations
+#################################################################
+
+ex:ElectricalMeter a sosa:Sensor ;
+    rdfs:label "Three-phase electrical meter" .
+
+ex:CurrentRMS a sosa:ObservableProperty ;
+    rdfs:label "RMS current" .
+
+ex:Observation_2022_02_21T10_15_00 a sosa:Observation ;
+    rdfs:label "Electrical observation at 2022-02-21 10:15:00" ;
+    sosa:madeBySensor ex:ElectricalMeter ;
+    sosa:observedProperty ex:CurrentRMS ;
+    sosa:hasFeatureOfInterest ex:WheelWashingFacility ;
+    iabm:evidencesState ex:State31 ;
+    sosa:resultTime ex:Instant_2022_02_21T10_15_00 .
+
+ex:Instant_2022_02_21T10_15_00 a time:Instant ;
+    rdfs:label "2022-02-21T10:15:00" .
+
+#################################################################
+# States, predictions, sequences
+#################################################################
+
+ex:State31 a iabm:OperationalState ;
+    rdfs:label "State 31" ;
+    iabm:hasStructuralAnchor ex:Channel38A5 ;
+    iabm:hasStructuralAnchor ex:Channel38A6 ;
+    iabm:hasFunctionalRole ex:PumpingRole ;
+    iabm:belongsToSequence ex:Sequence_19_31_12 .
+
+ex:Prediction_2022_02_21T10_15_00 a iabm:StatePrediction ;
+    rdfs:label "Predicted operational state at 2022-02-21 10:15:00" ;
+    iabm:derivedFromObservation ex:Observation_2022_02_21T10_15_00 .
+
+ex:Sequence_19_31_12 a iabm:BehavioralSequence ;
+    rdfs:label "Behavioral sequence 19/31/12" ;
+    iabm:summarizedByMode ex:SteadyOperationMode ;
+    iabm:hasWorkingMode ex:InternalCoordinatedWorkingMode .
+
+#################################################################
+# Modes
+#################################################################
+
+ex:SteadyOperationMode a iabm:OperatingMode ;
+    rdfs:label "Steady Operation" ;
+    iabm:hasFunctionalRole ex:PumpingRole .
+
+ex:InternalCoordinatedWorkingMode a iabm:WorkingMode ;
+    rdfs:label "Internally coordinated pumping regime" .
+
+#################################################################
+# Abnormality evidence
+#################################################################
+
+ex:Sequence_19_31_12_PostFault a iabm:BehavioralSequence ;
+    rdfs:label "Behavioral sequence 19/31/12 after pump malfunction" ;
+    iabm:summarizedByMode ex:SteadyOperationMode ;
+    iabm:hasWorkingMode ex:InternalCoordinatedWorkingMode ;
+    iabm:deviatesFromNominal ex:Sequence_19_31_12 .
+
+ex:Pump2FaultEvidence a iabm:AbnormalityEvidence ;
+    rdfs:label "Abnormality evidence associated with post-fault sequence duration change" ;
+    iabm:hasAnomalyScore "0.82"^^xsd:decimal .

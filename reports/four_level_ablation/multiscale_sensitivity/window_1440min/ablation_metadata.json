@@ -1,0 +1,138 @@
+{
+  "level_columns": {
+    "M0": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence"
+    ],
+    "M1": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence",
+      "command_response_deviation"
+    ],
+    "M2": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence",
+      "command_response_deviation",
+      "transient_concentration"
+    ],
+    "M3": [
+      "sequence_divergence",
+      "duration_drift",
+      "recurrence_excess",
+      "persistence_excess",
+      "consumption_deviation",
+      "state_error_rate",
+      "mode_divergence",
+      "command_response_deviation",
+      "transient_concentration_vqe"
+    ]
+  },
+  "config": {
+    "onset_quantile": 0.95,
+    "recovery_quantile": 0.8,
+    "share_exact_vqe_threshold": true,
+    "minimum_phase_windows": 24,
+    "risk_horizons_hours": [
+      6,
+      24,
+      72,
+      168
+    ],
+    "risk_target_families": [
+      "pump_abrupt_failure",
+      "process_saturation"
+    ]
+  },
+  "model_d_config": {
+    "window": {
+      "length": "P1DT0H0M0S",
+      "step": "P0DT0H15M0S",
+      "min_coverage": 0.9,
+      "min_active_sequences": 1
+    },
+    "detection": {
+      "onset_threshold": 1.0,
+      "recovery_threshold": 0.5,
+      "onset_windows": 2,
+      "recovery_windows": 3,
+      "minimum_duration": "P0DT0H10M0S",
+      "maximum_gap": "P0DT2H0M0S",
+      "maximum_duration": "P7DT0H0M0S"
+    },
+    "weights": {
+      "sequence": 1.0,
+      "duration": 1.0,
+      "recurrence": 1.0,
+      "persistence": 1.0,
+      "consumption": 1.0,
+      "state_error": 1.0,
+      "mode": 1.0,
+      "command_response": 1.0,
+      "transient_concentration": 1.0
+    },
+    "family_assignment": {
+      "method": "rule_based",
+      "minimum_confidence": 0.6
+    },
+    "occurrence": {
+      "minimum_events_for_fit": 5
+    }
+  },
+  "centers": {
+    "sequence_divergence": 0.023910261360808947,
+    "duration_drift": 0.2717026240255411,
+    "recurrence_excess": 0.0,
+    "persistence_excess": 0.0,
+    "consumption_deviation": 0.017702302717054336,
+    "state_error_rate": 0.06950407566423994,
+    "mode_divergence": 0.01455648872278506,
+    "command_response_deviation": 1.8244995499737282,
+    "transient_concentration": 1.5360008675158778,
+    "transient_concentration_vqe": 1.5360008675158778
+  },
+  "scales": {
+    "sequence_divergence": 0.039686259950208205,
+    "duration_drift": 0.6053364821137295,
+    "recurrence_excess": 6.0711070111088015,
+    "persistence_excess": 0.9118541033434651,
+    "consumption_deviation": 0.0922768604476566,
+    "state_error_rate": 0.009788980951132372,
+    "mode_divergence": 0.016531030701039735,
+    "command_response_deviation": 0.14945663658760044,
+    "transient_concentration": 0.4412473907417854,
+    "transient_concentration_vqe": 0.4412473907417854
+  },
+  "common_support_windows": 792,
+  "reference_status": "weak derived signal references",
+  "phase_windows": {
+    "reference": 329,
+    "calibration": 192,
+    "test": 271
+  },
+  "study_end": "2022-09-11 00:00:00",
+  "risk_holdout_start": "2022-08-19 00:00:00",
+  "evaluation_incident_count": 115,
+  "threshold_policy": "M3 shares M2",
+  "validation_availability": {
+    "maintenance overlap": "unavailable: no temporally aligned intervention intervals",
+    "false warning burden": "unavailable: no independently healthy intervals; total warning burden is reported",
+    "physical onset/recovery accuracy": "unavailable: independent timestamped onset/recovery truth absent",
+    "physical risk performance": "unavailable: only fixed weak-reference risk performance can be evaluated"
+  },
+  "sensitivity_window_minutes": 1440
+}

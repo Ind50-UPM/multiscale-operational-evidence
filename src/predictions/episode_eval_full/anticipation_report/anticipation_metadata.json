@@ -1,0 +1,24 @@
+{
+  "config": {
+    "horizons_hours": [
+      24,
+      72,
+      168
+    ],
+    "target_families": [
+      "process_saturation",
+      "pump_abrupt_failure"
+    ],
+    "holdout_fraction": 0.3,
+    "risk_threshold": 0.55,
+    "warning_threshold": 0.35
+  },
+  "artifacts": {
+    "feature_frame": "src/predictions/episode_eval_full/anticipation_report/feature_frame.csv",
+    "scored_windows": "src/predictions/episode_eval_full/anticipation_report/scored_windows.csv",
+    "validation_summary": "src/predictions/episode_eval_full/anticipation_report/validation_summary.csv",
+    "horizon_coefficients": "src/predictions/episode_eval_full/anticipation_report/horizon_coefficients.csv",
+    "maintenance_actions": "src/predictions/episode_eval_full/anticipation_report/maintenance_actions.csv",
+    "html_report": "src/predictions/episode_eval_full/anticipation_report/anticipation_report.html"
+  }
+}

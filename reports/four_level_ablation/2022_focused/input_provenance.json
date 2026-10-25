@@ -1,0 +1,68 @@
+{
+  "boundaries_utc": {
+    "start": "2022-07-01",
+    "observer_end": "2022-07-22",
+    "reference_end": "2022-08-05",
+    "calibration_end": "2022-08-19",
+    "end": "2022-09-11"
+  },
+  "input_audit": {
+    "analogicas_nonans.parquet": {
+      "rows": 7712604,
+      "duplicate_timestamps": 0,
+      "sha256": "281d6acf659d74af93905d79bd2cb60370825e0c02ca1b90c23e2aade5154271"
+    },
+    "digitales.parquet": {
+      "rows": 12358892,
+      "duplicate_timestamps": 0,
+      "sha256": "aa4fccba8cdb2818cd2e5a89cc5876c4fc87d17c07cfc77304a69cdf783149b1"
+    },
+    "unmatched_command_samples": 8,
+    "retained_Model_A_predictions": {
+      "sha256": "851ae35a77b05273aa68e3b1b732ca590a0d79dd1ab2a5fc5012f9f8a397e674",
+      "exact_timestamp_fraction": 0.1642963906872439,
+      "provenance": "retained pred_estado; original Model A chronological training split not recovered; not independent health labels"
+    }
+  },
+  "electrical_config": {
+    "channels": [
+      "RP1",
+      "RP2",
+      "RP3"
+    ],
+    "state_column": "controller_state",
+    "timestamp_column": "timestamp",
+    "minimum_samples": 32,
+    "minimum_safe_fraction": 0.9,
+    "settling_samples": 3,
+    "maximum_gap_seconds": 1.614,
+    "sample_period_seconds": 0.807,
+    "shrinkage": 0.1,
+    "inverse_floor": 1e-06
+  },
+  "vqe_resource_budget": {
+    "layers": 3,
+    "sweeps": 6,
+    "restarts": 2,
+    "seed": 1729,
+    "batch_size": 256,
+    "simulator": "NumPy statevector RY/CX; no eigenvector warm start or fallback"
+  },
+  "behavioral_definition": "new frozen raw-command seven-coordinate encoder; not replay of retained semantic baseline; command-bit-count mode proxy",
+  "observer_definition": "state median/MAD and settling guard; not the atlas state-and-age observer",
+  "model_a_prediction_warning": "retained sparse predictions; original Model A fit/holdout provenance not reconstructed",
+  "encoding_seconds": 159.01876924559474,
+  "source_code_sha256": {
+    "src/run_model_d_ablation.py": "b346ce0a8ccbb6f2c98991baff7be0c1fbe14c7f29ba2c708cd727b723c0fbb9",
+    "src/Model_D/iabm_incidents/behavioral.py": "aca1f4c2215271bf69671eed0b4c30a52bc0e06c817969206af234b2d048061d",
+    "src/Model_D/iabm_incidents/electrical.py": "0b1f462b45446c93c43abf49f8bdcb6caf72fd2011823c11f2069c00d3eb779c",
+    "src/Model_D/iabm_incidents/ablation.py": "d745a567239bbaf29e9e0aeeabfc06f03370ad7f1e16f34242fd0654419c109b"
+  },
+  "behavioral_refresh": {
+    "reason": "mask rare unknown commands and exclude their transitions; sufficient nominal-state coverage for dwell",
+    "source_hashes": {
+      "src/run_model_d_ablation.py": "6dbb9a0f804198ec60dfaca2907d50e7d3209f49afe614b53b820ca088fdae09",
+      "src/Model_D/iabm_incidents/behavioral.py": "890f1f095cf5b12d87506187e7575d200b59f32f3505e0b43147801159b3fad5"
+    }
+  }
+}

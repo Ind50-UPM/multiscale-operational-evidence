@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Smart System ID 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-08 22:59+0100\n"
+"PO-Revision-Date: 2026-03-08 23:00+0100\n"
+"Last-Translator: Joaquin Ordieres Mere <jordieres@apiivm01.etsii.upm.es>\n"
+"Language-Team: Spanish <es@tp.org.es>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Industrial state identification framework for IIoT assets"
+msgstr "Framework de identificación de estados industriales para activos IIoT"
+
+msgid "Execution mode: train a new model or generate predictions."
+msgstr "Modo de ejecución: entrenar un nuevo modelo o generar predicciones."
+
+msgid "Algorithm to use for Model_A training or inference."
+msgstr "Algoritmo a utilizar para el entrenamiento o la inferencia de Model_A."
+
+msgid "Interface language."
+msgstr "Idioma de la interfaz."
+
+msgid "Path to the analog Parquet dataset."
+msgstr "Ruta al conjunto de datos analógicos en formato Parquet."
+
+msgid "Path to the digital Parquet dataset used for training labels."
+msgstr "Ruta al conjunto de datos digitales en formato Parquet usado para las etiquetas de entrenamiento."
+
+msgid "Output path for the trained model artifact."
+msgstr "Ruta de salida para el artefacto del modelo entrenado."
+
+msgid "Output directory for metrics or predictions."
+msgstr "Directorio de salida para métricas o predicciones."
+
+msgid "Start date (YYYY-MM-DD HH:MM:SS)."
+msgstr "Fecha de inicio (YYYY-MM-DD HH:MM:SS)."
+
+msgid "End date (YYYY-MM-DD HH:MM:SS)."
+msgstr "Fecha de fin (YYYY-MM-DD HH:MM:SS)."
+
+msgid "Power threshold used to mark inactive rows."
+msgstr "Umbral de potencia utilizado para marcar filas inactivas."
+
+msgid "Number of cross-validation folds."
+msgstr "Número de particiones de validación cruzada."
+
+msgid "Include inactive rows with state 0 in the prediction output."
+msgstr "Incluir las filas inactivas con estado 0 en la salida de predicción."
+
+msgid "Starting cross-validation from {} to {}"
+msgstr "Iniciando validación cruzada desde {} hasta {}"
+
+msgid "Fold {}: accuracy = {:.4f}"
+msgstr "Fold {}: precisión = {:.4f}"
+
+msgid "Average accuracy: {:.4f} (+/- {:.4f})"
+msgstr "Precisión media: {:.4f} (+/- {:.4f})"
+
+msgid "Training accuracy: {:.4f}"
+msgstr "Precisión de entrenamiento: {:.4f}"
+
+msgid "Metrics saved to: {}"
+msgstr "Métricas guardadas en: {}"
+
+msgid "Model saved to: {}"
+msgstr "Modelo guardado en: {}"
+
+msgid "Model path is required for prediction mode (--model-out)."
+msgstr "La ruta del modelo es obligatoria en modo predicción (--model-out)."
+
+msgid "Prediction output directory is required (--pred-out)."
+msgstr "El directorio de salida de predicciones es obligatorio (--pred-out)."
+
+msgid "Loading model from: {}"
+msgstr "Cargando modelo desde: {}"
+
+msgid "Loading data for prediction from {} to {}"
+msgstr "Cargando datos para predicción desde {} hasta {}"
+
+msgid "Predictions saved to: {}"
+msgstr "Predicciones guardadas en: {}"
+
+msgid "Unsupported algorithm: {}."
+msgstr "Algoritmo no soportado: {}."
