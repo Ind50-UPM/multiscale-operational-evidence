@@ -1,7 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite the accompanying manuscript and the software."
 title: "Multi-Scale Operational Evidence: certified variational fourth-order transients and conformal multi-scale fusion for low-intrusion industrial telemetry"
-version: 1.0.0
+version: 1.0.1
+date-released: "2026-10-25"
 license: AGPL-3.0-only
 repository-code: "https://github.com/Ind50-UPM/multiscale-operational-evidence"
 authors:

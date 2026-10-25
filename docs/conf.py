@@ -69,7 +69,7 @@ class MermaidDirective(Directive):
 project = "Multi-Scale Operational Evidence"
 author = "Antonio Bello-García, Javier Villalba-Díez, Ana González-Marcos, Joaquín Ordieres-Meré"
 copyright = "2026, the Multi-Scale Operational Evidence authors"
-release = "1.0.0"
+release = "1.0.1"
 version = "1.0"
 
 extensions = [

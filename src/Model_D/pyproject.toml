@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "industrial-incidents-model-d"
-version = "1.0.0"
+version = "1.0.1"
 description = "Multi-scale incident evidence, certified variational fourth-order transients, conformal fusion and episodes (Model D)"
 authors = ["Antonio Bello-García", "Javier Villalba-Díez", "Ana González-Marcos", "Joaquín Ordieres-Meré"]
 license = "AGPL-3.0-only"
