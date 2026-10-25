@@ -80,6 +80,7 @@ flowchart TB
 | `pipeline.py`, `experimental.py`, `main.py` | Indicator pipeline, experiment runner and CLI |
 | `ablation.py`, `multiscale.py` | M0–M3 matched ablation and window-length sensitivity |
 | `conformal.py`, `quantum.py`, `injection.py` | Conformal fusion, quantum-information view/certificates/noise model, fault injection |
+| `identification.py` | Fault-type identification from the Pauli signature of the shape operator |
 
 ## Installation
 
@@ -392,6 +393,21 @@ total loss of one phase). `window_statistics` evaluates
 `mean_residual_norm`, `mean_shift`, `second_order`, `fourth_order` (Tconc),
 `kurtosis_ratio` and `qjsd` per controller-state context and aggregates by the
 maximum, exactly like Tconc.
+
+## Shape-operator identification
+
+`window_shape_signature` (in `injection.py`) keeps, for the context with the
+largest Tconc, the 35 non-identity Pauli coefficients of the shape change
+`Δρ = ρ(F_w) − ρ(F_0)` (`quantum.pauli_vector`, `quantum.shape_change`).
+`identification.py` scores feature sets with grouped cross-validation over
+calendar windows on two tasks (fault family; one- vs three-phase
+under-response) and exports the mean Pauli shift of each scenario. The raw
+matrix entries are scored as a control, since the Pauli map is a linear
+reparametrisation:
+
+```bash
+PYTHONPATH=src/Model_D python src/run_model_d_extensions.py --stage identification   # after --stage telemetry
+```
 
 ## Reproducibility scripts
 

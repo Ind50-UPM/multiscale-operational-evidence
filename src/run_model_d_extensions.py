@@ -14,6 +14,8 @@ src/run_model_d_extensions.py --stage all``. Stages:
 * ``robustness``: certification of transient-only decisions, Kato-Temple
   tightness, shot/noise study at 24 h and 15 min, and conformal seed and
   mid-p sensitivity.
+* ``identification``: fault-type identification from the Pauli signature of
+  the shape operator on the injection benchmark.
 
 Primary and multiscale artifacts are read-only; outputs go to ``--output-dir``.
 
@@ -62,6 +64,8 @@ Outputs (``--output-dir``, default ``reports/extensions``):
       ``shot_noise_T4_decisions_15min.csv``, ``conformal_seed_sensitivity.csv``,
       ``conformal_midp.csv``, ``conformal_episodes_<level>.csv``,
       ``consistency_checks.csv``.
+    * identification: ``identification_scores.csv``,
+      ``identification_signatures.csv``.
     * Always: ``extensions_metadata.json`` (stage completion times, noise
       models, source hashes, elapsed time; merged with previous runs).
 
@@ -73,7 +77,8 @@ Script dependencies:
     silently skips the corresponding alternative-coordinate rows otherwise,
     so with ``--stage all`` the order ``model_a``, ``quantum``,
     ``telemetry``, ``fusion``, ``robustness`` matters (``robustness`` reads
-    the outputs of ``quantum`` and ``telemetry``).
+    the outputs of ``quantum`` and ``telemetry``; ``identification`` reads
+    ``injection_windows.parquet`` from ``telemetry``).
 
 .. mermaid::
 
@@ -88,6 +93,7 @@ Script dependencies:
         P --> F
         Q -->|certificates_*.csv| R[stage_robustness]
         T -->|order_statistics_primary.parquet| R
+        T -->|injection_windows.parquet| ID[stage_identification]
         M --> F
         REG[candidate registry] --> F
         Q --> OUT[reports/extensions]
@@ -123,7 +129,10 @@ from iabm_incidents.ablation import (BEHAVIORAL_COLUMNS, COMMAND_COLUMN, EXACT_C
 from iabm_incidents.config import ModelDConfig
 from iabm_incidents.conformal import ConformalEvidenceFusion, ConformalFusionConfig
 from iabm_incidents.electrical import VQEDirectionSolver, _safe_history
-from iabm_incidents.injection import STATISTICS, Injection, fit_second_order, inject, window_statistics
+from iabm_incidents.injection import (STATISTICS, SHAPE_COLUMNS, Injection, fit_second_order, inject,
+    window_shape_signature, window_statistics)
+from iabm_incidents.identification import (SCALAR_FEATURES, grouped_identification, identification_tasks,
+    matrix_entries, pauli_signatures)
 from iabm_incidents.quantum import (NoiseModel, NoisyVQEDirectionSolver, ShotEstimator,
     deflated_second_direction, information_profile, kato_temple_bounds, swap_test_shots)
 
@@ -495,6 +504,21 @@ def stage_telemetry(output, data_dir):
         safe = safe_all[lo:hi] & _safe_history(part, cfg)
         return window_statistics(r_all[lo:hi] if r is None else r, safe, states_all[lo:hi], model.references, seconds, cfg.minimum_samples), lo, hi, safe
 
+    def shape(lo, hi, safe, r=None):
+        """Pauli signature of the dominant shape change on a residual slice.
+
+        Args:
+            lo (int): Slice start index.
+            hi (int): Slice end index.
+            safe (numpy.ndarray): Safe mask of the slice.
+            r (numpy.ndarray | None): Optional replacement residuals.
+
+        Returns:
+            dict: Output of :func:`iabm_incidents.injection.window_shape_signature`.
+        """
+        return window_shape_signature(r_all[lo:hi] if r is None else r, safe, states_all[lo:hi],
+                                      model.references, cfg.minimum_samples)
+
     frame, meta, calibration, common = load_scale('primary')
     rows = []
     for position, row in frame.iterrows():
@@ -533,7 +557,9 @@ def stage_telemetry(output, data_dir):
             continue
         # Alternate calendar days balance the non-stationarity of the two calibration weeks.
         split = 'threshold' if start.dayofyear % 2 == 0 else 'evaluation'
-        records.append(dict(start_time=start, split=split, scenario='clean', active_samples=int(active.sum()), **clean))
+        # Note: the shape signature adds columns only; it draws no random numbers.
+        records.append(dict(start_time=start, split=split, scenario='clean', active_samples=int(active.sum()),
+                            **clean, **shape(lo, hi, safe)))
         if split == 'threshold':
             continue
         for scenario, duration_s in scenarios:
@@ -542,7 +568,7 @@ def stage_telemetry(output, data_dir):
             values, *_ = statistics(start, end, r)
             label = f'{scenario.kind}|m={scenario.magnitude:g}|rate={scenario.rate_per_hour:g}|len={duration_s:g}s|phases={len(scenario.phases)}'
             records.append(dict(start_time=start, split='evaluation', scenario=label, active_samples=int(active.sum()),
-                                events=events, **values))
+                                events=events, **values, **shape(lo, hi, safe, r)))
     bench = pd.DataFrame(records)
     bench.to_parquet(output/'injection_windows.parquet', index=False)
     null = bench[bench.scenario.eq('clean') & bench.split.eq('threshold')]
@@ -880,6 +906,46 @@ def stage_robustness(output):
     ).to_csv(output/'consistency_checks.csv', index=False)
 
 
+def stage_identification(output):
+    """Fault-type identification from the Pauli signature of the shape operator.
+
+    Reads ``injection_windows.parquet`` (telemetry stage) and compares, with
+    grouped cross-validation over calendar windows, four feature sets for the
+    ``family`` and ``phase`` tasks of :mod:`iabm_incidents.identification`:
+    the six scalar statistics; the scalars plus the 35 Pauli coefficients of
+    :math:`\\Delta\\rho`; the scalars plus the 36 upper-triangular entries of
+    :math:`\\Delta\\rho` (a linear reparametrisation, used as a control); and
+    the Pauli coefficients alone. It also exports the mean Pauli shift of each
+    scenario relative to clean windows.
+
+    Args:
+        output (Path): Destination folder (``reports/extensions``).
+
+    Notes:
+        Writes ``identification_scores.csv`` and
+        ``identification_signatures.csv``. Requires scikit-learn and the
+        ``pauli_*`` columns written by the telemetry stage.
+    """
+    windows = pd.read_parquet(output/'injection_windows.parquet')
+    if SHAPE_COLUMNS[0] not in windows:
+        raise ValueError('Run the telemetry stage first: injection_windows.parquet has no Pauli signature')
+    scores = []
+    for task, (rows, labels, groups) in identification_tasks(windows).items():
+        scalars = rows[list(SCALAR_FEATURES)]
+        sets = {'scalars': scalars,
+                'scalars + Pauli signature': pd.concat([scalars, rows[list(SHAPE_COLUMNS)]], axis=1),
+                'scalars + matrix entries': pd.concat([scalars, matrix_entries(rows)], axis=1),
+                'Pauli signature only': rows[list(SHAPE_COLUMNS)]}
+        table = grouped_identification(rows, labels, groups, sets)
+        table.insert(0, 'task', task)
+        table['windows'] = len(rows); table['classes'] = len(set(labels))
+        scores.append(table)
+    scores = pd.concat(scores, ignore_index=True)
+    scores.to_csv(output/'identification_scores.csv', index=False)
+    pauli_signatures(windows).to_csv(output/'identification_signatures.csv', index=False)
+    print(scores.round(3).to_string(index=False), flush=True)
+
+
 def main():
     """Run the selected extension stages and verify read-only inputs.
 
@@ -891,18 +957,18 @@ def main():
     Notes:
         The module docstring is also the ``--help`` text (raw formatting).
         Options: ``--stage`` (``model_a``, ``quantum``, ``telemetry``,
-        ``fusion``, ``robustness`` or ``all``), ``--output-dir`` and ``--data-dir`` (Paths).
+        ``fusion``, ``robustness``, ``identification`` or ``all``), ``--output-dir`` and ``--data-dir`` (Paths).
         Updates ``extensions_metadata.json`` in the output folder.
     """
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--stage', choices=['model_a', 'quantum', 'telemetry', 'fusion', 'robustness', 'all'], default='all')
+    parser.add_argument('--stage', choices=['model_a', 'quantum', 'telemetry', 'fusion', 'robustness', 'identification', 'all'], default='all')
     parser.add_argument('--output-dir', type=Path, default=Path('reports/extensions'))
     parser.add_argument('--data-dir', type=Path, default=Path('data'))
     args = parser.parse_args(); output = args.output_dir; output.mkdir(parents=True, exist_ok=True)
     before = {str(p): _hash(p) for p in [*PRIMARY.rglob('*'), *MULTISCALE.rglob('*')] if p.is_file() and p.suffix != '.html'}
     tic = time.perf_counter()
     _, _, model, _ = restore_electrical(PRIMARY)
-    stages = ['model_a', 'quantum', 'telemetry', 'fusion', 'robustness'] if args.stage == 'all' else [args.stage]
+    stages = ['model_a', 'quantum', 'telemetry', 'fusion', 'robustness', 'identification'] if args.stage == 'all' else [args.stage]
     for stage in stages:
         print(f'== {stage} ==', flush=True)
         if stage == 'model_a':
@@ -913,8 +979,10 @@ def main():
             stage_telemetry(output, args.data_dir)
         elif stage == 'fusion':
             stage_fusion(output)
-        else:
+        elif stage == 'robustness':
             stage_robustness(output)
+        else:
+            stage_identification(output)
     after = {str(p): _hash(p) for p in [*PRIMARY.rglob('*'), *MULTISCALE.rglob('*')] if p.is_file() and p.suffix != '.html'}
     if before != after:
         raise RuntimeError('Primary or multiscale artifacts changed')

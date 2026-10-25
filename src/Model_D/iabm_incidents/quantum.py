@@ -32,6 +32,9 @@ Main public objects:
       :func:`von_neumann_entropy`, :func:`quantum_jensen_shannon`,
       :func:`trace_distance`, :func:`scatter_from_operator`,
       :func:`information_profile`.
+    * Shape-operator signatures: :data:`REAL_PAULI_LABELS`,
+      :func:`pauli_vector`, :func:`shape_change` (used for fault-type
+      identification in :mod:`iabm_incidents.identification`).
     * Resource estimates: :func:`swap_test_shots`,
       :func:`pauli_decomposition`, :func:`measurement_settings`.
     * NISQ simulation: :class:`NoiseModel`, :class:`ShotEstimator`,
@@ -350,6 +353,58 @@ def pauli_decomposition(matrix: np.ndarray) -> dict[str, float]:
         if abs(value) > 1e-14:
             terms[label] = value
     return terms
+
+
+#: The 36 real three-qubit Pauli strings (even number of ``Y`` factors), in a
+#: fixed lexicographic order over ``"IXYZ"``; qubit 0 is the most significant bit.
+REAL_PAULI_LABELS = tuple(label for label in map("".join, itertools.product("IXYZ", repeat=3))
+                          if label.count("Y") % 2 == 0)
+
+
+def pauli_vector(matrix: np.ndarray) -> np.ndarray:
+    r"""Pauli coefficients of a real symmetric 8 x 8 matrix in a fixed label order.
+
+    Unlike :func:`pauli_decomposition`, which drops negligible terms and
+    returns a dictionary, this function always returns all 36 coefficients
+    :math:`c_P = \operatorname{tr}(PM)/8` in the order of
+    :data:`REAL_PAULI_LABELS`, so that the result can be used directly as a
+    feature vector.
+
+    Args:
+        matrix: Real symmetric ``8 x 8`` matrix (tolerance ``1e-10``).
+
+    Returns:
+        numpy.ndarray: Shape ``(36,)``; :math:`M = \sum_P c_P P`.
+
+    Raises:
+        ValueError: If the matrix is not ``8 x 8`` or not symmetric.
+
+    Notes:
+        The map is linear and invertible on real symmetric matrices, so the
+        vector carries exactly the information of the matrix entries; its value
+        is that each coefficient is a measurable expectation on three qubits and
+        has a structured reading in terms of the embedding bits.
+    """
+    m = np.asarray(matrix, float)
+    if m.shape != (8, 8) or not np.allclose(m, m.T, atol=1e-10):
+        raise ValueError("Real symmetric 8 x 8 matrix required")
+    return np.array([np.real(np.einsum("ij,ji->", np.kron(np.kron(PAULI[l[0]], PAULI[l[1]]), PAULI[l[2]]), m))/8
+                     for l in REAL_PAULI_LABELS])
+
+
+def shape_change(scatter: np.ndarray, reference: TransientReference) -> np.ndarray:
+    r"""Change of transient shape :math:`\Delta\rho = \rho_w - \rho_0`.
+
+    Args:
+        scatter: Window fourth-order scatter :math:`F_w` (PSD, ``8 x 8``).
+        reference: Frozen transient reference holding :math:`F_0`.
+
+    Returns:
+        numpy.ndarray: Symmetric, trace-zero ``8 x 8`` matrix. Its identity
+        Pauli coefficient is therefore zero, and the remaining 35 coefficients
+        describe how the direction of transient concentration moved.
+    """
+    return density_operator(scatter)-density_operator(reference.scatter)
 
 
 def measurement_settings(labels) -> dict[str, tuple[str, ...]]:

@@ -88,6 +88,25 @@ Seed sensitivity of the smoothed conformal p-values (50 seeds):
    :file: _static/extensions/conformal_seeds.csv
    :header-rows: 1
 
+Fault-type identification from the shape operator
+-------------------------------------------------
+
+Macro-F1 and accuracy of out-of-fold predictions (grouped 5-fold logistic
+regression on held-out injection windows):
+
+.. csv-table::
+   :file: _static/extensions/identification.csv
+   :header-rows: 1
+
+The Pauli signature of :math:`\Delta\rho` raises the identification of
+single- versus three-phase under-response from 0.59 to 0.83 macro-F1 and the
+family identification from 0.76 to 0.82. The raw matrix entries give the same
+phase result (0.835), confirming that the information lies in the full shape
+operator. The physical reading of individual Pauli terms is limited by the
+current embedding (three phases at lags 0--1 and the common mode at lags
+2--3), which does not factorise over the qubit bits; an embedding of four
+channels by two lags would give each term a direct channel/lag meaning.
+
 Model A class-level diagnostics
 -------------------------------
 

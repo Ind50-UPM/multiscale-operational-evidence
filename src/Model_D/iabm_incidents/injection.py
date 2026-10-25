@@ -51,6 +51,8 @@ Main public objects
 * :data:`STATISTICS` -- names of the exported statistics.
 * :class:`SecondOrderReference` and :func:`fit_second_order`.
 * :func:`context_statistics` and :func:`window_statistics`.
+* :data:`SHAPE_COLUMNS` and :func:`window_shape_signature` (Pauli signature of
+  the dominant shape change, for fault-type identification).
 * :class:`Injection` and :func:`inject`.
 
 Data contracts
@@ -77,9 +79,12 @@ import numpy as np
 import pandas as pd
 
 from .electrical import TransientReference, causal_delay, fourth_scatter
-from .quantum import information_profile
+from .quantum import REAL_PAULI_LABELS, information_profile, pauli_vector, shape_change
 
 STATISTICS = ("mean_residual_norm", "mean_shift", "second_order", "fourth_order", "kurtosis_ratio", "qjsd")
+#: Column names of the 35 non-identity Pauli coefficients of the shape change
+#: (the identity coefficient of a trace-zero matrix is always zero).
+SHAPE_COLUMNS = tuple(f"pauli_{label}" for label in REAL_PAULI_LABELS if label != "III")
 
 
 @dataclass(frozen=True)
@@ -193,6 +198,63 @@ def window_statistics(r: np.ndarray, safe: np.ndarray, states: np.ndarray, refer
             continue
         for name, value in context_statistics(x, reference, second).items():
             out[name] = value if not np.isfinite(out[name]) else max(out[name], value)
+    return out
+
+
+def window_shape_signature(r: np.ndarray, safe: np.ndarray, states: np.ndarray, references: dict,
+                           minimum_samples: int, asset: str = "asset-unknown") -> dict[str, float]:
+    r"""Pauli signature of the shape change of the dominant transient context.
+
+    For every supported controller-state context the fourth-order scatter
+    :math:`F_{w,c}` and its score :math:`T^{(4)}_{w,c}` are computed as in
+    :func:`context_statistics`; the context with the largest score is
+    retained, and the 35 non-identity Pauli coefficients of
+    :math:`\Delta\rho=\rho(F_{w,c})-\rho(F_{0,c})` are returned. Where
+    :math:`T^{(4)}_w` says *how much* the transient organisation changed, the
+    signature says *in which direction* it changed, which is what separates,
+    for instance, single-phase from three-phase under-response.
+
+    Args:
+        r: Residuals of one window, shape ``(N, 3)``, time ordered.
+        safe: Safety mask of shape ``(N,)``; non-finite rows are excluded.
+        states: Controller state per sample, shape ``(N,)``.
+        references: Transient references keyed by ``(asset_id, state)``.
+        minimum_samples: Minimum number of embedding rows per context.
+        asset: Asset identifier used to build the reference keys.
+
+    Returns:
+        dict[str, float]: ``shape_context_state`` (state of the retained
+        context), ``shape_fourth_order`` (its :math:`T^{(4)}`) and the
+        :data:`SHAPE_COLUMNS`; all NaN when no context is supported.
+
+    Notes:
+        The coefficients are a linear, invertible reparametrisation of the
+        entries of :math:`\Delta\rho`; any identification gain comes from
+        using the full operator rather than a scalar summary, while the Pauli
+        basis gives each coefficient a three-qubit measurement and a reading in
+        terms of the embedding bits.
+    """
+    out = {"shape_context_state": np.nan, "shape_fourth_order": np.nan, **{c: np.nan for c in SHAPE_COLUMNS}}
+    ok = safe & np.isfinite(r).all(1)
+    best = None
+    for state in pd.unique(states):
+        reference = references.get((asset, state))
+        x = causal_delay(r, ok & (states == state))
+        if reference is None or len(x) < minimum_samples:
+            continue
+        z = (x-reference.center) @ reference.whitening
+        f = fourth_scatter(z)
+        d4 = (f-reference.scatter)/reference.scale
+        score = max(float(np.linalg.eigvalsh((d4+d4.T)/2)[-1]), 0.)**.25
+        # Note: ties keep the first context, matching max() in window_statistics.
+        if best is None or score > best[0]:
+            best = (score, state, (f+f.T)/2, reference)
+    if best is None:
+        return out
+    delta = shape_change(best[2], best[3])
+    coefficients = pauli_vector((delta+delta.T)/2)
+    out.update(shape_context_state=float(best[1]), shape_fourth_order=best[0])
+    out.update({c: float(v) for c, v in zip(SHAPE_COLUMNS, coefficients[1:])})
     return out
 
 

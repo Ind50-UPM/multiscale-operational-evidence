@@ -8,6 +8,7 @@ import pytest
 from iabm_incidents.conformal import ConformalEvidenceFusion, cauchy_combination, smoothed_conformal_pvalues
 from iabm_incidents.electrical import TransientReference, VQEDirectionSolver, fourth_scatter
 from iabm_incidents.injection import Injection, SecondOrderReference, context_statistics, inject
+from iabm_incidents.quantum import PAULI as PAULI_
 from iabm_incidents.quantum import (NoiseModel, NoisyVQEDirectionSolver, ShotEstimator, density_operator,
     deflated_second_direction, information_profile, kato_temple_bounds, measurement_settings,
     pauli_decomposition, quantum_jensen_shannon, trace_distance)
@@ -153,3 +154,46 @@ def test_injection_reports_applied_events_and_uses_sample_period():
     assert abs(np.mean(counts)-2) < .1
     out, events = inject(r, np.zeros(4461), active, offsets, Injection("under_response", .1), rng, return_events=True)
     assert events == 0 and np.allclose(out[:, 0], -.1) and np.allclose(out[:, 1:], 0)
+
+
+def test_pauli_vector_order_and_reconstruction():
+    from iabm_incidents.quantum import REAL_PAULI_LABELS, pauli_vector
+    h = _operator(5)
+    coefficients = pauli_vector(h)
+    assert len(REAL_PAULI_LABELS) == 36 and REAL_PAULI_LABELS[0] == "III"
+    rebuilt = sum(c*np.real(np.kron(np.kron(PAULI_[l[0]], PAULI_[l[1]]), PAULI_[l[2]])) for c, l in zip(coefficients, REAL_PAULI_LABELS))
+    assert np.allclose(rebuilt, h)
+
+
+def test_shape_change_is_trace_zero_and_signature_columns():
+    from iabm_incidents.injection import SHAPE_COLUMNS, window_shape_signature
+    from iabm_incidents.quantum import pauli_vector, shape_change
+    reference = _reference(4)
+    delta = shape_change(2*reference.scatter+np.eye(8), reference)
+    assert abs(np.trace(delta)) < 1e-12 and abs(pauli_vector(delta)[0]) < 1e-12
+    rng = np.random.default_rng(9)
+    r = rng.standard_normal((600, 3)); states = np.zeros(600); safe = np.ones(600, bool)
+    signature = window_shape_signature(r, safe, states, {("asset-unknown", 0.0): reference}, 32)
+    assert len(SHAPE_COLUMNS) == 35 and all(np.isfinite(signature[c]) for c in SHAPE_COLUMNS)
+    empty = window_shape_signature(r, safe, states, {}, 32)
+    assert np.isnan(empty["shape_fourth_order"])
+
+
+def test_matrix_entries_and_grouped_identification():
+    from iabm_incidents.identification import grouped_identification, matrix_entries
+    from iabm_incidents.injection import SHAPE_COLUMNS
+    from iabm_incidents.quantum import pauli_vector
+    rng = np.random.default_rng(3)
+    rows, labels, mats = [], [], []
+    for k in range(80):
+        a = rng.standard_normal((8, 8)); m = (a+a.T)/2; m -= np.trace(m)/8*np.eye(8)
+        shift = 1.5 if k % 2 else -1.5
+        m[0, 0] += shift; m[1, 1] -= shift
+        rows.append(pauli_vector(m)[1:]); labels.append("A" if k % 2 else "B"); mats.append(m)
+    frame = pd.DataFrame(rows, columns=list(SHAPE_COLUMNS))
+    entries = matrix_entries(frame)
+    upper = np.triu_indices(8)
+    assert entries.shape == (80, 36)
+    assert np.allclose(entries.to_numpy(), np.stack([m[upper] for m in mats]))
+    table = grouped_identification(frame, np.array(labels), np.arange(80)//2, {"pauli": frame, "entries": entries})
+    assert (table.macro_f1 > .8).all()

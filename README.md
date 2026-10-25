@@ -26,6 +26,7 @@ and is demonstrated on an unattended wheel-washing facility monitored from
 | **NISQ resource model**: Pauli/qubit-wise-commuting measurement, finite shots, depolarising and readout noise, shot-based noisy VQE | `ShotEstimator`, `NoisyVQEDirectionSolver` | 24-h decisions unchanged at 64 shots per basis; at 15 min, few shots and unmitigated noise change 1–3 % of transient-only decisions |
 | **Conformal Cauchy-combination fusion** of evidence dimensions and integration scales with attribution | `iabm_incidents.conformal` | Physical evidence becomes decision-relevant; scale dependence becomes monotone |
 | **Semi-synthetic fault injection** through the frozen observer (labelled ground truth) | `iabm_incidents.injection` | Fourth order flags 98 % of one-hour windows with ~6 one-second dropouts (75 % at 2/h) vs 34 % (26 %) for 2nd order and 9 % for the mean residual |
+| **Shape-operator identification**: Pauli signature of the change of the residual density operator | `iabm_incidents.identification`, `window_shape_signature` | Single- vs three-phase under-response: macro-F1 0.59 → 0.83; fault family 0.76 → 0.82 |
 | Matched **M0–M3 ablation**, **multiscale sensitivity**, class-level Model A diagnostics | `iabm_incidents.ablation`, `iabm_incidents.multiscale` | Reproducible artifacts under `reports/` |
 
 ---
@@ -115,7 +116,7 @@ Derived artifacts that the experiments consume are already versioned.
 export PYTHONPATH=src:src/Model_D
 python src/run_model_d_ablation.py                 # M0–M3 ablation, 24-h windows
 python src/run_model_d_multiscale.py               # 15 min / 1 h / 6 h / 24 h sensitivity
-python src/run_model_d_extensions.py --stage all   # Model A metrics, certificates, noise, injection, fusion
+python src/run_model_d_extensions.py --stage all   # Model A metrics, certificates, noise, injection, fusion, identification
 python src/export_extension_figure_data.py         # pgfplots tables used in the paper figures
 ```
 

@@ -3,6 +3,21 @@
 All notable changes to this project are documented here. The project follows
 [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+- New experiment: fault-type identification from the shape operator.
+  `iabm_incidents.quantum` gains `REAL_PAULI_LABELS`, `pauli_vector` and
+  `shape_change`; `iabm_incidents.injection` gains `SHAPE_COLUMNS` and
+  `window_shape_signature`; the new module `iabm_incidents.identification`
+  provides grouped cross-validated evaluation and Pauli signatures.
+- `run_model_d_extensions.py`: the telemetry stage now also stores the Pauli
+  signature of every injection window (extra columns only; all previous
+  outputs are unchanged), and the new `identification` stage writes
+  `identification_scores.csv` and `identification_signatures.csv`.
+- On held-out injection windows the signature raises single- versus
+  three-phase identification from 0.59 to 0.83 macro-F1 and fault-family
+  identification from 0.76 to 0.82.
+
 ## 1.0.1 – pandas 3 compatibility
 
 - `BehavioralWindowEncoder.encode` copies the gap mask before updating it in

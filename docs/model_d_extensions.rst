@@ -104,6 +104,23 @@ persistent under-response, short power dropouts and additive bursts.
 norm, whitened mean shift, second-order score, fourth-order score, kurtosis
 ratio and QJSD with identical whitening and context aggregation.
 
+Fault-type identification from the shape operator
+-------------------------------------------------
+
+:math:`T^{(4)}_w` and :math:`\kappa_w` say *how much* the transient
+organisation changed; the shape change
+:math:`\Delta\rho=\rho(F_w)-\rho(F_0)` of the dominant context says *in which
+direction*. :func:`iabm_incidents.injection.window_shape_signature` stores its
+35 non-identity Pauli coefficients (:func:`iabm_incidents.quantum.pauli_vector`)
+for every window of the injection benchmark, and
+:mod:`iabm_incidents.identification` evaluates two tasks with grouped
+cross-validation over calendar windows: the fault *family* (clean,
+under-response, dropouts, bursts) and whether an under-response affects *one or
+three phases*. Because the Pauli map is linear and invertible, the
+upper-triangular matrix entries are scored as a control: any gain comes from
+using the full operator, and the Pauli basis supplies a measurable,
+structured reading of it.
+
 Running the extensions
 ----------------------
 
@@ -114,6 +131,7 @@ Running the extensions
    PYTHONPATH=src/Model_D python src/run_model_d_extensions.py --stage telemetry   # needs data/*.parquet
    PYTHONPATH=src/Model_D python src/run_model_d_extensions.py --stage fusion
    PYTHONPATH=src/Model_D python src/run_model_d_extensions.py --stage robustness  # after quantum and telemetry
+   PYTHONPATH=src/Model_D python src/run_model_d_extensions.py --stage identification  # after telemetry
    PYTHONPATH=src:src/Model_D python src/export_extension_figure_data.py
 
 The runner hashes every primary and multiscale artifact before and after the
