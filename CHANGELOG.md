@@ -3,6 +3,13 @@
 All notable changes to this project are documented here. The project follows
 [Semantic Versioning](https://semver.org/).
 
+## 1.0.1 – pandas 3 compatibility
+
+- `BehavioralWindowEncoder.encode` copies the gap mask before updating it in
+  place, so it no longer fails under pandas copy-on-write (`ValueError: output
+  array is read-only`). The values are unchanged, so no reported result is
+  affected; `test_behavioral_partial_nominal_support_and_gap_mask` now passes.
+
 ## 1.0.0 – Initial public release
 
 First release of **Multi-Scale Operational Evidence**, published with a fresh
@@ -45,8 +52,3 @@ history. It accompanies the *Results in Engineering* manuscript *Calibrated Mult
   recursive API reference, generated inheritance (UML) diagrams, Mermaid
   component/class/sequence diagrams, and a manuscript-to-code map.
 
-### Known limitations
-- `tests/test_ablation.py::test_behavioral_partial_nominal_support_and_gap_mask`
-  fails under pandas ≥ 3 because `behavioral.py` writes into a read-only
-  array view (copy-on-write); results reported in the manuscript are not
-  affected because the primary indicators were materialised before.

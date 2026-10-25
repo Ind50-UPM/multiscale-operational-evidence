@@ -10,10 +10,9 @@ the numbers reported in the manuscript unless stated.
 Confirmed
 ---------
 
-* ``tests/test_ablation.py::test_behavioral_partial_nominal_support_and_gap_mask``
-  fails under pandas 3 because ``BehavioralWindowEncoder.encode`` writes into
-  a read-only array view (copy-on-write). The primary indicators were
-  materialised before this pandas version, so reported results are unaffected.
+* Fixed in 1.0.1: ``BehavioralWindowEncoder.encode`` wrote into a read-only
+  array view under pandas copy-on-write, which made
+  ``test_behavioral_partial_nominal_support_and_gap_mask`` fail.
 * Episode confirmation time is the end of the second window of a run, which
   can be a tolerated interruption rather than a warning window (see
   :mod:`iabm_incidents.segmentation` and the manuscript methods).

@@ -59,10 +59,9 @@ The seven coordinates (for one window):
     :math:`o_s` the occupancy fraction and :math:`n` the number of samples.
 
 Maintenance notes:
-    Known issue: under pandas copy-on-write, the gap mask obtained from
-    ``Series.to_numpy()`` in :meth:`BehavioralWindowEncoder.encode` can be a
-    read-only view, so the in-place ``gaps[1:] |= ...`` update raises
-    (observed in ``test_behavioral_partial_nominal_support_and_gap_mask``).
+    Under pandas copy-on-write, ``Series.to_numpy()`` can return a read-only
+    view; :meth:`BehavioralWindowEncoder.encode` therefore requests a copy of
+    the gap mask before updating it in place (fixed in 1.0.1).
     Transition pairs are encoded as ``64 * from + to`` (4096 bins), and mode
     is the number of active control bits (popcount, 7 bins).
 """
@@ -289,10 +288,9 @@ class BehavioralWindowEncoder:
             samples = samples.loc[finite]
             u = u[finite]
         u = u.astype(int)
-        gaps = samples[cfg.timestamp_column].diff().dt.total_seconds().gt(cfg.maximum_gap_seconds).to_numpy()
+        # Note: copy=True keeps the array writable under pandas copy-on-write.
+        gaps = samples[cfg.timestamp_column].diff().dt.total_seconds().gt(cfg.maximum_gap_seconds).to_numpy(copy=True)
         # Why: removed unknown-state samples must split runs like timestamp gaps.
-        # Note: under pandas copy-on-write ``gaps`` may be read-only, making
-        # this in-place update fail (known failing test; not fixed here).
         gaps[1:] |= np.diff(original_positions) > 1
         states, durations, pair_valid = _runs(u,gaps,cfg.sample_period_seconds)
         pairdist = _distribution((states[:-1]*64+states[1:])[pair_valid],4096)
